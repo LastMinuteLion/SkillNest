@@ -159,7 +159,7 @@ const loginUser = asyncHandler( async(req,res) => {
         const payload = {
             email:user.email,
             id: user._id,
-            role:user.role,
+            role:user.accountType,
         }
         const token = jwt.sign(payload , process.env.JWT_SECRET, {
             expiresIn:"2h",
@@ -186,7 +186,46 @@ const loginUser = asyncHandler( async(req,res) => {
 
    //changePassword
 
-   const changePassword = 
+   const changePassword = asyncHandler( async(req,res) => {
+    //get data from body
+
+    const{currentPassword , newPassword , confirmNewPassword ,email} = req.body;
+
+    //get old password , new password , confirm newpassword
+
+    if (!currentPassword || !newPassword || !confirmNewPassword || !email) {
+        throw new ApiError(400, "Please provide all required fields");
+      }
+
+    //validation
+
+    const user = await User.findById({email:email});
+    if (!user) {
+        throw new ApiError(404, "User not found");
+      }
+
+    const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordMatch) {
+       throw new ApiError(401, "Incorrect current password");
+      }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+     // Update user password in database ,update in db
+     user.password = hashedNewPassword;
+     await user.save();
+
+
+    //send mail of password updated
+
+
+
+    //return response
+
+    res.status(200).json(
+        new ApiResponse(200 , user , "password changed succesfully")
+    )
+   })
 
 
 
@@ -196,6 +235,6 @@ export{
     signUp,
     loginUser,
     changePassword,
-    
+
 
 }

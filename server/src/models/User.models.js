@@ -46,6 +46,14 @@ const userSchema = new Schema(
         type:String,
         required:true,
       },
+      token:{
+        type:String,
+      },
+
+      resetPasswordExpires:{
+        type:Date,
+      },
+      
       courseProgress:[
         {
             type:Schema.Types.ObjectId,
