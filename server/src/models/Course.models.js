@@ -34,9 +34,9 @@ const courseSchema = new Schema(
         thumbnail:{
             type:String,
         },
-        tag: {
+        category: {
             type: Schema.Types.ObjectId,
-            ref:"Tag",
+            ref:"Category",
         },
         studentsEnrolled: [{
             type:Schema.Types.ObjectId,

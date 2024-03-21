@@ -1,5 +1,5 @@
 import { Course } from "../models/Course.models";
-import { Tag } from "../models/Tags.models";
+import { Category } from "../models/Category.models";
 import { User } from "../models/User.models";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
@@ -9,13 +9,13 @@ import { uploadImageToCloudinary } from "../utils/imageUploader";
 //create course handler function
 
 const createCourse = asyncHandler(async(req,res) => {
-    const{courseName , courseDescription , whatYouWillLearn ,price , tag} = req.body;
+    const{courseName , courseDescription , whatYouWillLearn ,price , category} = req.body;
 
     //get thmubnail
     const thumbnail = req.files.thumbnailImage;
 
     //validation 
-    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category
         || !thumbnail){
             throw new ApiError(400 , "All fields are required")
     }
@@ -29,11 +29,8 @@ const createCourse = asyncHandler(async(req,res) => {
         throw new ApiError(404 , " Instructor details not found")
     }
 
-    //check given tag is valid or not
-    const tagDetails = await Tag.findById(tag);
-    if(!tagDetails){
-        throw new ApiError(404 , " Tag details not found")
-    }
+    
+    
 
     //upload Image to CLoduinary
     const thumbnailImage = await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
@@ -46,7 +43,7 @@ const createCourse = asyncHandler(async(req,res) => {
         instructor:instructorDetails._id,
         whatYouWillLearn:whatYouWillLearn,
         price,
-        tag:tagDetails._id,
+        category,
         thumbnail:thumbnailImage.secure_url,
     })
 
@@ -61,17 +58,9 @@ const createCourse = asyncHandler(async(req,res) => {
         {new:true},
     )
 
-    //update tag schema
+    //update category schema
 
-    await Tag.findByIdAndUpdate(
-        {id:tagDetails._id},
-        {
-            $push:{
-                courses:newCourse._id,
-            }
-        },
-        {new:true}
-    )
+   
 
     return res.status(200).json({
         success:true,
