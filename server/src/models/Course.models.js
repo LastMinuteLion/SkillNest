@@ -34,6 +34,10 @@ const courseSchema = new Schema(
         thumbnail:{
             type:String,
         },
+        tag:{
+            type:[String],
+            required:true
+        },
         category: {
             type: Schema.Types.ObjectId,
             ref:"Category",
@@ -42,7 +46,14 @@ const courseSchema = new Schema(
             type:Schema.Types.ObjectId,
             required:true,
             ref:"User",
-        }]
+        }],
+        instructions:{
+            type:[String],
+        },
+        status:{
+            type:String,
+            enum:["Draft" , "Published"],
+        },
 
     },
 

@@ -14,7 +14,13 @@ const ratingAndReviewsSchema = new Schema(
         review:{
             type:String,
             required:true,
-        }
+        },
+        course:{
+            type:Schema.Types.ObjectId,
+            required:true,
+            ref:"Course",
+            index:true,
+        },
     },
 
     {
@@ -22,4 +28,4 @@ const ratingAndReviewsSchema = new Schema(
     }
 )
 
-export const RatingAndReviews = mongoose.model("RatingAndReviews" ,ratingAndReviewsSchema);
+export const RatingAndReview = mongoose.model("RatingAndReviews" ,ratingAndReviewsSchema);

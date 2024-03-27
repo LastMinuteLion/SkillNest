@@ -2,6 +2,7 @@ import { Category } from "../models/Category.models";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
+import { Course } from "../models/Course.models";
 
 //create category handler function
 
@@ -46,8 +47,43 @@ const showAllCategory = asyncHandler( async(req , res) => {
     }
 })
 
+const  categoryPageDetails = asyncHandler(async(req,res) =>{
+    const  {categoryId} = req.body;
+
+    const selectedCategory = await Category.findById(categoryId)
+                                        .populate("courses")
+                                        .exec();
+
+    if(!selectedCategory){
+        throw new ApiError(404 , "Category not found")
+    }
+
+    const diffCategories = await Category.find({
+        _id:{$ne:categoryId},
+    })
+    .populate("courses")
+    .exec();
+
+    const topCourses = await Course.find({})
+     .sort({
+        "studentsEnrolled":-1
+     })
+     .limit(10);
+
+
+    return res.status(200).json(
+        {success:true,
+        data:{
+            selectedCategory,
+            diffCategories,
+            topCourses
+        }}
+    )
+})
+
 
 export{
     createCategory,
     showAllCategory,
+    categoryPageDetails,
 }

@@ -3,9 +3,16 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/User.models.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { OTP } from "../models/OTP.models.js";
+import { Profile } from "../models/Profile.models.js";
+import passwordUpdated from "../mail/templates/changePassword.mjs";
 import otpGenerator from "otp-generator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
+import { mailSender } from "../utils/mailSender.js";
+import dotenv from "dotenv";
+dotenv.config({
+    path:"./.env"
+})
 //REquire dotenv
 
 
@@ -189,7 +196,9 @@ const loginUser = asyncHandler( async(req,res) => {
    const changePassword = asyncHandler( async(req,res) => {
     //get data from body
 
-    const{currentPassword , newPassword , confirmNewPassword ,email} = req.body;
+    const userDetails = await User.findById(req.user.id);
+
+    const{currentPassword , newPassword , confirmNewPassword } = req.body;
 
     //get old password , new password , confirm newpassword
 
@@ -199,31 +208,45 @@ const loginUser = asyncHandler( async(req,res) => {
 
     //validation
 
-    const user = await User.findById({email:email});
-    if (!user) {
-        throw new ApiError(404, "User not found");
-      }
+    
 
-    const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+    const isPasswordMatch = await bcrypt.compare(currentPassword, userDetails.password);
       if (!isPasswordMatch) {
        throw new ApiError(401, "Incorrect current password");
       }
 
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    if(newPassword !== confirmNewPassword){
+        throw new ApiError(401,"password should match")
+    }
 
-     // Update user password in database ,update in db
-     user.password = hashedNewPassword;
-     await user.save();
+    const encryptedPassword = await bcrypt.hash(newPassword,10);
+    const updatedUserDetails = await User.findByIdAndUpdate(
+        req.user.id,
+        {password:encryptedPassword},
+        {new:true}
+    )
 
-
-    //send mail of password updated
-
-
+    try {
+        const emailRes = await mailSender(
+            updatedUserDetails.email,
+            passwordUpdated(
+                updatedUserDetails.email,
+                `Password updated succesfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+            )
+        )
+        console.log("Email sent succesfully" , emailRes.response);
+    } catch (error) {
+        console.log("Error while sending email",error);
+        return res.status(500).json({
+            success:false,
+            message:"Error occured while sending email",
+            error:error.message
+        })
+    }
 
     //return response
-
     res.status(200).json(
-        new ApiResponse(200 , user , "password changed succesfully")
+        new ApiResponse(200 , updatedUserDetails , "password changed succesfully")
     )
    })
 
