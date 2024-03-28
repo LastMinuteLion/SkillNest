@@ -25,7 +25,7 @@ router.route("/changePassword").post(auth ,changePassword)
 //                                      Reset Password
 // ********************************************************************************************************
 
-router.post("/reset-password-token" , resetPasswordToken)
-router.post("/reset-password" , resetPassword)
+router.route("/reset-password-token").post (resetPasswordToken)
+router.route("/reset-password" ).post(resetPassword)
 
 export default router;

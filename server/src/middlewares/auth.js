@@ -101,5 +101,6 @@ export{
     isAdmin,
     isInstructor,
     isInstructor,
-    auth
+    auth,
+    isStudent
 }

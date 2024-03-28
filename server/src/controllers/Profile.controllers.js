@@ -4,8 +4,9 @@ import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Course } from "../models/Course.models";
+import { uploadImageToCloudinary } from "../utils/imageUploader";
 
-const createProfile = asyncHandler(async(req,res) => {
+const updateProfile = asyncHandler(async(req,res) => {
     const{dateOfBirth = "" , about = "" , contactNumber ,gender} = req.body;
 
     const id = req.user.id;
@@ -75,9 +76,49 @@ const getAllUserDetails = asyncHandler(async(req,res) =>{
         )
 })
 
-export {
-    createProfile,
-    deleteAccount,
-    getAllUserDetails
+const updateDisplayPicture = asyncHandler(async(req,res) =>{
+    const displayPicture = req.files.displayPicture
+    const userId = req.user.id;
+    const image = await uploadImageToCloudinary(
+        displayPicture,
+        process.env.FOLDER_NAME,
+        1000,
+        1000
+    )
+    console.log(image);
+    const updatedProfile = await User.findByIdAndUpdate(
+        {_id:userId},
+        {
+            image:image.secure_url
+        },
+        {new:true}
+    )
+    res.status(200).json(
+        new ApiResponse(200 , updatedProfile , "Profile picture updates succesfully")
+    )
+})
 
+const getEnrolledCourses = asyncHandler(async(req,res) => {
+    const userId = req.user.id
+    const userDetails = await User.findOne({
+        _id:userId,
+    })
+    .populate("courses")
+    .exec();
+
+    if(!userDetails){
+        throw new ApiError(409,`Could not find user with id ${userDetails}`)
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200,userDetails.courses ,"Courses fetched succefully")
+    )
+})
+
+export {
+    updateProfile,
+    deleteAccount,
+    getAllUserDetails,
+    updateDisplayPicture,
+    getEnrolledCourses
 }
