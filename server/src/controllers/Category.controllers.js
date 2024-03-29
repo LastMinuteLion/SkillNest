@@ -1,8 +1,8 @@
-import { Category } from "../models/Category.models";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Course } from "../models/Course.models";
+import { Category } from "../models/Category.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Course } from "../models/Course.models.js";
 
 //create category handler function
 

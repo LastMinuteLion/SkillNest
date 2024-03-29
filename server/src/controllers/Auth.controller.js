@@ -8,7 +8,7 @@ import passwordUpdated from "../mail/templates/changePassword.mjs";
 import otpGenerator from "otp-generator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
-import { mailSender } from "../utils/mailSender.js";
+import mailSender from "../utils/mailSender.js";
 import dotenv from "dotenv";
 dotenv.config({
     path:"./.env"
@@ -19,7 +19,7 @@ dotenv.config({
 
 // sendOTP
 
-const sendOTP = asyncHandler(async(res,res) => {
+const sendOTP = asyncHandler(async(req,res) => {
 
     //fetch email from req body
 
@@ -101,16 +101,16 @@ const signUp = asyncHandler( async(req ,res) => {
          }
 
          //find the most recent OTP in DB stored for user
-         const recentOTP = await OTP.findOne({email}).sort({createdAt:-1}).limit(1);
-         console.log(recentOTP);
+         const response = await OTP.findOne({email}).sort({createdAt:-1}).limit(1);
+         console.log(response);
 
          //validate OTP
 
-         if(recentOTP.length == 0){
+         if(response.length === 0){
             //OTP not found
             throw new ApiError(400 , "OTP not found")
          }
-         else if(otp !== recentOTP.otp){
+         else if(otp !== response.otp){
             throw new ApiError(400, "OTP not matching")
          }
 
@@ -258,6 +258,4 @@ export{
     signUp,
     loginUser,
     changePassword,
-
-
 }

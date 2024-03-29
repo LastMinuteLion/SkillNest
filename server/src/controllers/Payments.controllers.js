@@ -1,10 +1,10 @@
 import { instance } from "../utils/razorpay";
-import { Course } from "../models/Course.models";
-import { User } from "../models/User.models";
-import { mailSender } from "../utils/mailSender";
-import { ApiResponse } from "../utils/ApiResponse";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Course } from "../models/Course.models.js";
+import { User } from "../models/User.models.js";
+import { mailSender } from "../utils/mailSender.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import mongoose from "mongoose"
 import courseEnrollmentEmail from "../mail/templates/courseEnrollmentEmail";
 

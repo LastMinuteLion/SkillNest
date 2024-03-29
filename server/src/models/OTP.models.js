@@ -1,4 +1,6 @@
 import mongoose , {Schema} from "mongoose";
+import mailSender from "../utils/mailSender.js";
+import otpTemplate from "../mail/templates/emailVerification.mjs";
 
 const OTPSchema = new Schema(
     {
@@ -20,7 +22,7 @@ const OTPSchema = new Schema(
 
 const sendVerificationEmail = async (email, otp) => {
     try {
-        const mailResponse = await mailSender(email, "Verification Email from SkillNest", otp);
+        const mailResponse = await mailSender(email, "Verification Email from SkillNest", otpTemplate(otp));
         console.log("Email sent Successfully: ", mailResponse);
     } catch(error) {
         console.log("error occurred while sending mails: ", error);

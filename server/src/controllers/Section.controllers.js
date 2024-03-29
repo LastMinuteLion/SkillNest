@@ -1,8 +1,8 @@
-import { Section } from "../models/Section.models";
-import { Course } from "../models/Course.models";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
+import { Section } from "../models/Section.models.js";
+import { Course } from "../models/Course.models.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createSection = asyncHandler(async(req,res) => {
     const {sectionName , courseId} = req.body;

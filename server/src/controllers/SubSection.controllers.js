@@ -1,12 +1,12 @@
-import { SubSection } from "../models/Subsection.models";
-import { Section } from "../models/Section.models";
-import { Course } from "../models/Course.models";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
-import { uploadImageToCloudinary } from "../utils/imageUploader";
-import { ApiResponse } from "../utils/ApiResponse";
+import { SubSection } from "../models/Subsection.models.js";
+import { Section } from "../models/Section.models.js";
+import { Course } from "../models/Course.models.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { uploadImageToCloudinary } from "../utils/imageUploader.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
-const createSubsection  = asyncHandler(async(res,req) =>{
+const createSubSection  = asyncHandler(async(res,req) =>{
     const{title ,description , timeDuration , sectionId} = req.body;
 
     const video = req.files.videoFile;
@@ -42,7 +42,7 @@ const createSubsection  = asyncHandler(async(res,req) =>{
 
 
 
-const updateSubsecton = asyncHandler(async(req,res) =>{
+const updateSubSection = asyncHandler(async(req,res) =>{
   const {sectionId , subSectionId , title , description} =req.body;
 
   const video = req.file.videoFile;
@@ -73,7 +73,7 @@ const updateSubsecton = asyncHandler(async(req,res) =>{
     );
 })
 
-const deleteSubsecton = asyncHandler(async(req,res) =>{
+const deleteSubSection = asyncHandler(async(req,res) =>{
     const { subSectionId, sectionId } = req.body;
 
     if (!subSectionId  || !sectionId) {
@@ -104,7 +104,7 @@ const deleteSubsecton = asyncHandler(async(req,res) =>{
 })
 
 export {
-    createSubsection,
-    updateSubsecton,
-    deleteSubsecton
+    createSubSection,
+    updateSubSection,
+    deleteSubSection
 }

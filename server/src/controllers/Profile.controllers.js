@@ -1,10 +1,10 @@
-import { Profile } from "../models/Profile.models";
-import { User } from "../models/User.models";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Course } from "../models/Course.models";
-import { uploadImageToCloudinary } from "../utils/imageUploader";
+import { Profile } from "../models/Profile.models.js";
+import { User } from "../models/User.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Course } from "../models/Course.models.js";
+import { uploadImageToCloudinary } from "../utils/imageUploader.js";
 
 const updateProfile = asyncHandler(async(req,res) => {
     const{dateOfBirth = "" , about = "" , contactNumber ,gender} = req.body;

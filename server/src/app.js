@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors"
 import fileUpload from "express-fileupload"
 
-import { uploadImageToCloudinary } from "./utils/imageUploader";
+//import { uploadImageToCloudinary } from "./utils/imageUploader";
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.static("public"));
 
-import userRouter from "./routes/user.routes";
+import userRouter from "./routes/user.routes.js";
 import profileRouter from "./routes/profile.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import courseRouter from "./routes/course.routes.js";

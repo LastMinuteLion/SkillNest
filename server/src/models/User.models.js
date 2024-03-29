@@ -31,6 +31,15 @@ const userSchema = new Schema(
         required:true,
       },
 
+      active:{
+        type:String,
+        default:true
+      },
+      approved:{
+        type: Boolean,
+        default:true,
+      },
+
       additionalDetails:{
         type:Schema.Types.ObjectId,
         ref:"Profile",

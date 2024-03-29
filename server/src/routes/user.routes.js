@@ -2,10 +2,10 @@ import { Router } from "express";
 import { changePassword,
     loginUser,
     signUp,
-sendOTP} from "../controllers/Auth.controller";
+sendOTP} from "../controllers/Auth.controller.js";
 
-import { resetPassword ,resetPasswordToken } from "../controllers/ResetPassword.controller";
-import { auth } from "../middlewares/auth";
+import { resetPassword ,resetPasswordToken } from "../controllers/ResetPassword.controller.js";
+import { auth } from "../middlewares/auth.js";
 const router = Router();
 
 // Routes for Login, Signup, and Authentication
@@ -25,7 +25,7 @@ router.route("/changePassword").post(auth ,changePassword)
 //                                      Reset Password
 // ********************************************************************************************************
 
-router.route("/reset-password-token").post (resetPasswordToken)
+router.route("/reset-password-token").post(resetPasswordToken)
 router.route("/reset-password" ).post(resetPassword)
 
 export default router;

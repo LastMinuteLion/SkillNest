@@ -1,7 +1,7 @@
-import { User } from "../models/User.models";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { mailSender } from "../utils/mailSender";
+import { User } from "../models/User.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import  mailSender  from "../utils/mailSender.js";
 import bcrypt from 'bcrypt';
 
 
@@ -15,7 +15,7 @@ const resetPasswordToken = asyncHandler( async(req,res) => {
     //return response
 
     try {
-        const email = req.body;
+        const email = req.body.email;
     
         const user = await User.findOne({email:email});
     

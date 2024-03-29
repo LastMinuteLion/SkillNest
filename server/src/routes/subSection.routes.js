@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { isInstructor, auth } from "../middlewares/auth.middleware.js";
+import { isInstructor, auth } from "../middlewares/auth.js";
 import {
   createSubSection,
   deleteSubSection,
   updateSubSection,
-} from "../controllers/subSection.controller.js";
+} from "../controllers/SubSection.controllers.js";
 
 
 const router = Router();
