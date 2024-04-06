@@ -6,10 +6,10 @@ import { ApiError } from "../utils/ApiError.js";
 import { uploadImageToCloudinary } from "../utils/imageUploader.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const createSubSection  = asyncHandler(async(res,req) =>{
+const createSubSection  = asyncHandler(async(req,res) =>{
     const{title ,description , timeDuration , sectionId} = req.body;
 
-    const video = req.files.videoFile;
+    const video = req.files.video;
 
 
     if(!title || !description || !timeDuration || !sectionId || !video){
@@ -34,7 +34,7 @@ const createSubSection  = asyncHandler(async(res,req) =>{
                                           
 
     return res.status(200).json(
-        new ApiResponse(200 , updateSubsecton,"Subsection Created succesfully")
+        new ApiResponse(200 , updatedSection,"Subsection Created succesfully")
     )
 })
 

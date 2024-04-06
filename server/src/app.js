@@ -35,10 +35,10 @@ import ratingAndReviewRouter from "./routes/ratingAndReview.routes.js";
 
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/profile",profileRouter)
-app.use("/api/v1/category",categoryRouter)
+app.use("/api/v1/course",categoryRouter)
 app.use("/api/v1/course",courseRouter)
-app.use("/api/v1/section",sectionRouter)
-app.use("/api/v1/subsection",subSectionRouter)
+app.use("/api/v1/course",sectionRouter)
+app.use("/api/v1/course",subSectionRouter)
 app.use("/api/v1/ratingAndReview",ratingAndReviewRouter)
 
 

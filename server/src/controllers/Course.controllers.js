@@ -98,12 +98,12 @@ const getCourseDetails = asyncHandler(async(req,res)=>{
                                                 {
                                                     path:"instructor",
                                                     populate:{
-                                                        path:"additonalDetails"
+                                                        path:"additionalDetails"
                                                     }
                                                 }
                                             )
                                             .populate("category")
-                                            .populate("ratingAndReview")
+                                            //.populate("ratingAndReview")
                                             .populate({
                                                 path:"courseContent",
                                                 populate:{
