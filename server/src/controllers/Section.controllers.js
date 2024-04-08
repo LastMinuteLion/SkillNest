@@ -64,7 +64,7 @@ const deleteSection = asyncHandler(async(req,res) =>{
     return res.status(200).json(
         new ApiResponse(200 , {} , "Section Deleted Succesfully")
     )
-    //do we need to delete section from course schema
+    //do we need to delete section from course schema -> auto delete
 })
 
 export{

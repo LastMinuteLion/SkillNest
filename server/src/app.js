@@ -39,7 +39,7 @@ app.use("/api/v1/course",categoryRouter)
 app.use("/api/v1/course",courseRouter)
 app.use("/api/v1/course",sectionRouter)
 app.use("/api/v1/course",subSectionRouter)
-app.use("/api/v1/ratingAndReview",ratingAndReviewRouter)
+app.use("/api/v1/course",ratingAndReviewRouter)
 
 
 

@@ -101,7 +101,7 @@ const signUp = asyncHandler( async(req ,res) => {
          }
 
          //find the most recent OTP in DB stored for user
-         const response = await OTP.findOne({email}).sort({createdAt:-1}).limit(1);
+         const response = await OTP.find({email}).sort({createdAt:-1}).limit(1);
          console.log(response);
 
          //validate OTP
@@ -110,7 +110,7 @@ const signUp = asyncHandler( async(req ,res) => {
             //OTP not found
             throw new ApiError(400 , "OTP not found")
          }
-         else if(otp !== response.otp){
+         else if(otp !== response[0].otp){
             throw new ApiError(400, "OTP not matching")
          }
 

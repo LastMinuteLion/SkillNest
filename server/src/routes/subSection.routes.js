@@ -14,7 +14,7 @@ router
   .post(auth, isInstructor, createSubSection);
 router
   .route("/updateSubSection")
-  .put(auth, isInstructor, updateSubSection);
+  .post(auth, isInstructor, updateSubSection);
 router
   .route("/deleteSubSection")
   .delete(auth, isInstructor, deleteSubSection);

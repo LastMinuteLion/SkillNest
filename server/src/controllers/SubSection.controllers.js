@@ -45,13 +45,13 @@ const createSubSection  = asyncHandler(async(req,res) =>{
 const updateSubSection = asyncHandler(async(req,res) =>{
   const {sectionId , subSectionId , title , description} =req.body;
 
-  const video = req.file.videoFile;
+  const video = req.files.video;
 
-  if(!title || !description || !subSectionId || !subSectionId || !video){
+  if(!title || !description || !sectionId || !subSectionId || !video){
     throw new ApiError(400, "All details required")
   }
 
-  const subSection = await SubSection.findById({subSectionId});
+  const subSection = await SubSection.findById(subSectionId);
 
   if(!subSection){
     throw new ApiError(404 , "SubSection does not exist")
@@ -72,6 +72,7 @@ const updateSubSection = asyncHandler(async(req,res) =>{
         new ApiResponse(200, subSection, "Subsection updated successfully")
     );
 })
+
 
 const deleteSubSection = asyncHandler(async(req,res) =>{
     const { subSectionId, sectionId } = req.body;
