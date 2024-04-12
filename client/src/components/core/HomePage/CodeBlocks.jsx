@@ -3,6 +3,8 @@ import Button from "./Button";
 import { TypeAnimation } from "react-type-animation";
 import { FaArrowRight } from "react-icons/fa6";
 
+//reverse row function used
+
 const CodeBlocks = ({
   position,
   heading,
