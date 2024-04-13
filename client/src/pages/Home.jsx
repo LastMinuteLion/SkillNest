@@ -5,6 +5,11 @@ import HighlightText from '../components/core/HomePage/HighlightText'
 import Button from '../components/core/HomePage/Button'
 import Banner from "../assets/Images/banner.mp4"
 import CodeBlocks from '../components/core/HomePage/CodeBlocks'
+import TimeLineSection from '../components/core/HomePage/TimeLineSection'
+import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection'
+import Instructor from '../components/core/HomePage/Instructor'
+import Footer from '../components/common/Footer'
+import ExploreMore from '../components/core/HomePage/ExploreMore'
 
 const Home = () => {
   return (
@@ -119,10 +124,52 @@ const Home = () => {
             bgGradient={<div className="codeblock2 absolute"></div>}
           />
         </div>
-        {/* <ExploreMore /> */}
+        <ExploreMore />
       </div> 
 
-    
+      <div className="bg-pure-greys-5">
+        {/* Two buttons */}
+        <div className="homepage_bg h-[333px]">
+          <div className="flex gap-5 w-11/12 max-w-maxContent items-center mx-auto">
+            <div className="flex text-white mx-auto my-56 gap-6">
+              <Button active={true} linkto={"/signup"}>
+                <div className="flex items-center gap-2">
+                  Explore Full Catalog <FaArrowRight />
+                </div>
+              </Button>
+              <Button active={false} linkto={"/signup"}>
+                Learn More
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex w-11/12 max-w-maxContent mx-auto py-8">
+          <div className="flex gap-24">
+            <div className="text-4xl w-[45%]">
+              Get the Skills you need for a{" "}
+              <HighlightText text={"job that is in demand"} />
+            </div>
+            <div className="w-[45%] flex flex-col gap-6 items-start">
+              <div className="text-richblack-700">
+                The modern StudyNotion is the dictates its own terms. Today, to
+                be a competitive specialist requires more than professional
+                skills.
+              </div>
+              <Button active={true} linkto={"/signup"}>
+                Learn More
+              </Button>
+            </div>
+          </div>
+        </div>
+        <TimeLineSection />
+        <LearningLanguageSection />
+      </div>
+
+    {/* Section 3 */}
+    <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
+        <Instructor />
+      </div>
+      <Footer />
 
 
     </div>
