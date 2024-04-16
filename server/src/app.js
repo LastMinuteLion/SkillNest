@@ -33,7 +33,7 @@ import sectionRouter from "./routes/section.routes.js";
 import subSectionRouter from "./routes/subSection.routes.js";
 import ratingAndReviewRouter from "./routes/ratingAndReview.routes.js";
 
-app.use("/api/v1/users",userRouter)
+app.use("/api/v1/auth",userRouter)
 app.use("/api/v1/profile",profileRouter)
 app.use("/api/v1/course",categoryRouter)
 app.use("/api/v1/course",courseRouter)
