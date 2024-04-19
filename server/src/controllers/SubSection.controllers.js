@@ -68,8 +68,10 @@ const updateSubSection = asyncHandler(async(req,res) =>{
     // Save the updated subSection
     await subSection.save();
 
+    const updatedSection = await Section.findById(sectionId).populate("SubSection")
+
     return res.status(200).json(
-        new ApiResponse(200, subSection, "Subsection updated successfully")
+        new ApiResponse(200, updatedSection, "Subsection updated successfully")
     );
 })
 
@@ -99,8 +101,10 @@ const deleteSubSection = asyncHandler(async(req,res) =>{
         );
     }
 
+    const updatedSection = await Section.findById(sectionId).populate("SubSection")
+
     return res.status(200).json(
-        new ApiResponse(200, {} , "Subsection deleted successfully")
+        new ApiResponse(200, updatedSection , "Subsection deleted successfully")
     );
 })
 

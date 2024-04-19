@@ -3,6 +3,7 @@ import { Course } from "../models/Course.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { SubSection } from "../models/Subsection.models.js";
 
 const createSection = asyncHandler(async(req,res) => {
     const {sectionName , courseId} = req.body;
@@ -34,9 +35,9 @@ const createSection = asyncHandler(async(req,res) => {
 })
 
 const updateSection = asyncHandler( async(req,res) =>{
-    const {sectionName , sectionId} = req.body;
+    const {sectionName , sectionId , courseId} = req.body;
 
-    if(!sectionName || !sectionId){
+    if(!sectionName || !sectionId || !courseId){
         throw new ApiError(400 , "All fields are required");
     }
 
@@ -49,20 +50,53 @@ const updateSection = asyncHandler( async(req,res) =>{
         throw new ApiError(500 , "Section updation Failed")
     }
 
+    const course = await Course.findById(courseId)
+    .populate({
+        path:"courseContent",
+        populate:{
+            path:"subSection"
+        }
+    })
+    .exec()
+
     return res.status(200).json(
-        new ApiResponse(200,{} , "Section Updated Succesfully")
+        new ApiResponse(200,course , "Section Updated Succesfully")
     )
     
 })
 
 
 const deleteSection = asyncHandler(async(req,res) =>{
-    const {sectionId } = req.params
+    const {sectionId , courseId } = req.body
 
-    await Section.findOneAndDelete(sectionId);
+    await Course.findByIdAndUpdate(courseId,{
+        $pull:{
+            courseContent: sectionId,
+        }
+    })
+
+    const section = await Section.findById(sectionId);
+    console.log(sectionId , courseId);
+
+    if(!section){
+        throw new ApiError(404 , "Section not found")
+    }
+
+    await SubSection.deleteMany({_id: {$in: section.subSection}});
+
+    await Section.findByIdAndDelete(sectionId);
+
+    const course = await Course.findById(courseId).populate({
+        path:"courseContent",
+        populate:{
+            path:"subSection"
+        }
+    })
+    .exec();
+
 
     return res.status(200).json(
-        new ApiResponse(200 , {} , "Section Deleted Succesfully")
+        new ApiResponse(200 , course , "Section Deleted Succesfully")
     )
     //do we need to delete section from course schema -> auto delete
 })
