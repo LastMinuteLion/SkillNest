@@ -9,6 +9,8 @@ import { uploadImageToCloudinary } from "../utils/imageUploader.js";
 //create course handler function
 
 const createCourse = asyncHandler(async(req,res) => {
+
+    
     const{courseName , courseDescription , whatYouWillLearn ,price , category} = req.body;
 
     //get thmubnail
