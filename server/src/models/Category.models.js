@@ -9,7 +9,7 @@ const categorySchema = new Schema(
         description: {
             type:String,
         },
-        course: {
+        courses: {
             type:Schema.Types.ObjectId,
             ref:"Course",
         },

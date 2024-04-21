@@ -5,6 +5,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadImageToCloudinary } from "../utils/imageUploader.js";
+import { Section } from "../models/Section.models.js";
+import { SubSection } from "../models/Subsection.models.js";
+import { CourseProgress } from "../models/CourseProgress.models.js";
+import convertSecondsToDuration from "../utils/secToDuration.js";
+
 
 //create course handler function
 
