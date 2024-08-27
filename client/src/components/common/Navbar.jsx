@@ -122,7 +122,7 @@ const Navbar = () => {
         <div className='flex gap-x-4 items-center'>
 
             {
-                user && user?.accountType != "Instructor" && (
+                user && user?.accountType !== "Instructor" && (
                     <Link to="/dashboard/cart" className='relative'>
                         <AiOutlineShoppingCart />
                         {
