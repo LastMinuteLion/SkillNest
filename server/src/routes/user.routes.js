@@ -18,7 +18,7 @@ const router = Router();
 router.route("/signup").post(signUp)
 router.route("/login").post(loginUser)
 router.route("/sendotp").post(sendOTP)
-router.route("/changePassword").post(auth ,changePassword)
+router.route("/changepassword").post(auth ,changePassword)
 
 
 // ********************************************************************************************************

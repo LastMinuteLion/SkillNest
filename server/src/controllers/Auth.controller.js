@@ -193,62 +193,127 @@ const loginUser = asyncHandler( async(req,res) => {
 
    //changePassword
 
-   const changePassword = asyncHandler( async(req,res) => {
-    //get data from body
+//    const changePassword = asyncHandler( async(req,res) => {
+//     //get data from body
 
-    const userDetails = await User.findById(req.user.id);
+//     const userDetails = await User.findById(req.user.id);
 
-    const{currentPassword , newPassword , confirmNewPassword } = req.body;
+//     const{currentPassword , newPassword , confirmNewPassword } = req.body;
 
-    //get old password , new password , confirm newpassword
+//     //get old password , new password , confirm newpassword
 
-    if (!currentPassword || !newPassword || !confirmNewPassword || !email) {
-        throw new ApiError(400, "Please provide all required fields");
-      }
+//     if (!currentPassword || !newPassword || !confirmNewPassword || !email) {
+//         throw new ApiError(400, "Please provide all required fields");
+//       }
 
-    //validation
+//     //validation
 
     
 
+//     const isPasswordMatch = await bcrypt.compare(currentPassword, userDetails.password);
+//       if (!isPasswordMatch) {
+//        throw new ApiError(401, "Incorrect current password");
+//       }
+
+//     if(newPassword !== confirmNewPassword){
+//         throw new ApiError(401,"password should match")
+//     }
+
+//     const encryptedPassword = await bcrypt.hash(newPassword,10);
+//     const updatedUserDetails = await User.findByIdAndUpdate(
+//         req.user.id,
+//         {password:encryptedPassword},
+//         {new:true}
+//     )
+
+//     try {
+//         const emailRes = await mailSender(
+//             updatedUserDetails.email,
+//             passwordUpdated(
+//                 updatedUserDetails.email,
+//                 `Password updated succesfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+//             )
+//         )
+//         console.log("Email sent succesfully" , emailRes.response);
+//     } catch (error) {
+//         console.log("Error while sending email",error);
+//         return res.status(500).json({
+//             success:false,
+//             message:"Error occured while sending email",
+//             error:error.message
+//         })
+//     }
+
+//     //return response
+//     res.status(200).json(
+//         new ApiResponse(200 , updatedUserDetails , "password changed succesfully")
+//     )
+//    })
+
+const changePassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+  
+    // Debugging: Log the request body
+    console.log("Request Body:", req.body);
+  
+    // Validate required fields
+    if (!currentPassword || !newPassword) {
+      throw new ApiError(400, "Please provide all required fields");
+    }
+  
+    // Find user by ID
+    const userDetails = await User.findById(req.user.id);
+    if (!userDetails) {
+      throw new ApiError(404, "User not found");
+    }
+  
+    // Check if the current password is correct
     const isPasswordMatch = await bcrypt.compare(currentPassword, userDetails.password);
-      if (!isPasswordMatch) {
-       throw new ApiError(401, "Incorrect current password");
-      }
-
-    if(newPassword !== confirmNewPassword){
-        throw new ApiError(401,"password should match")
+    if (!isPasswordMatch) {
+      throw new ApiError(401, "Incorrect current password");
     }
-
-    const encryptedPassword = await bcrypt.hash(newPassword,10);
+  
+    // Hash the new password
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+  
+    // Update user password
     const updatedUserDetails = await User.findByIdAndUpdate(
-        req.user.id,
-        {password:encryptedPassword},
-        {new:true}
-    )
-
-    try {
-        const emailRes = await mailSender(
-            updatedUserDetails.email,
-            passwordUpdated(
-                updatedUserDetails.email,
-                `Password updated succesfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
-            )
-        )
-        console.log("Email sent succesfully" , emailRes.response);
-    } catch (error) {
-        console.log("Error while sending email",error);
-        return res.status(500).json({
-            success:false,
-            message:"Error occured while sending email",
-            error:error.message
-        })
+      req.user.id,
+      { password: encryptedPassword },
+      { new: true }
+    );
+  
+    if (!updatedUserDetails) {
+      throw new ApiError(500, "Failed to update password");
     }
-
-    //return response
+  
+    // Send email notification
+    try {
+      await mailSender(
+        updatedUserDetails.email,
+        passwordUpdated(
+          updatedUserDetails.email,
+          `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+        )
+      );
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.log("Error while sending email:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Password updated, but error occurred while sending email",
+        error: error.message,
+      });
+    }
+  
+    // Return success response
     res.status(200).json(
-        new ApiResponse(200 , updatedUserDetails , "password changed succesfully")
-    )
-   })
+      new ApiResponse(200, updatedUserDetails, "Password changed successfully")
+    );
+  });
+  
+  
+  
 
 
 

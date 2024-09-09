@@ -3,7 +3,7 @@ import { Course } from "../models/Course.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { SubSection } from "../models/Subsection.models.js";
+import { SubSection } from "../models/SubSection.models.js";
 
 const createSection = asyncHandler(async(req,res) => {
     const {sectionName , courseId} = req.body;

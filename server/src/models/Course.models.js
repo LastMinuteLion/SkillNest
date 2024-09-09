@@ -36,7 +36,7 @@ const courseSchema = new Schema(
         },
         tag:{
             type:[String],
-            required:true
+            //required:true
         },
         category: {
             type: Schema.Types.ObjectId,

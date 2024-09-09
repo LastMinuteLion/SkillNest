@@ -1,105 +1,94 @@
-import { User } from "../models/User.models.js";
 import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-
-//authentication
-
-const auth = asyncHandler( async(req, res ,next) => {
-    //extract token
+// Authentication middleware
+const auth = asyncHandler(async (req, res, next) => {
     try {
-        const token = req.cookies.token || 
-        req.body.token ||
-         req.header("Authorization").replace("Bearer" , "");
-    
-    
-        if(!token){
-            throw new ApiError(400,"Unauthorised request")
+        // Extract token from headers or cookies
+        const authHeader = req.header("Authorization");
+        const token = req.cookies.token || (authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : req.body.token);
+
+        if (!token) {
+            throw new ApiError(401, "Unauthorized request");
         }
-    
-        //verify the token
+
+        // Verify the token
         try {
-            const decode =  jwt.verify(token,process.env.JWT_SECRET);
-            console.log(decode);
-            req.user = decode;
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decoded); // Optional: for debugging
+            req.user = decoded;
         } catch (error) {
-           //verification issue
-           
-           return res.status(401).json({
-            success:false,
-            message:'token in invalid',
-           });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid token',
+            });
         }
 
         next();
-
     } catch (error) {
-        throw new ApiError(401 , error?.message|| "Invalid access Token")
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || "Authentication failed",
+        });
     }
+});
 
-    
-})
-
-
-//is Student
-
-const isStudent = asyncHandler( async(req,res,next) => {
+// Role-based middleware
+const isStudent = asyncHandler(async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Student"){
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for students only',
+        if (req.user.accountType !== "Student") {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied: Students only',
             });
         }
         next();
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:'User role cannot be verified , please try again'
-        })
+            success: false,
+            message: 'Unable to verify user role',
+        });
     }
-})
+});
 
-const isInstructor = asyncHandler( async(req,res,next) => {
+const isInstructor = asyncHandler(async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Instructor"){
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for Instructor only',
+        if (req.user.accountType !== "Instructor") {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied: Instructors only',
             });
         }
         next();
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:'User role cannot be verified , please try again'
-        })
+            success: false,
+            message: 'Unable to verify user role',
+        });
     }
-})
+});
 
-
-const isAdmin = asyncHandler( async(req,res,next) => {
+const isAdmin = asyncHandler(async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Admin"){
-            return res.status(401).json({
-                success:false,
-                message:'This is a protected route for Admin only',
+        if (req.user.accountType !== "Admin") {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied: Admins only',
             });
         }
         next();
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:'User role cannot be verified , please try again'
-        })
+            success: false,
+            message: 'Unable to verify user role',
+        });
     }
-})
+});
 
-export{
+export {
     isAdmin,
     isInstructor,
     auth,
     isStudent
-}
+};

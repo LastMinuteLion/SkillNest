@@ -26,14 +26,16 @@ export default function CourseBuilderForm() {
   } = useForm()
 
   const { course } = useSelector((state) => state.course)
-  const { token } = useSelector((state) => state.auth)
+  const { token } = useSelector((state) => state.auth);
+  //console.log('Token:', token); // Add this to verify the token value
+
   const [loading, setLoading] = useState(false)
   const [editSectionName, setEditSectionName] = useState(null)
   const dispatch = useDispatch()
 
   // handle form submission
   const onSubmit = async (data) => {
-    // console.log(data)
+     console.log(data)
     setLoading(true)
 
     let result
@@ -47,7 +49,7 @@ export default function CourseBuilderForm() {
         },
         token
       )
-      // console.log("edit", result)
+       console.log("edit", result)
     } else {
       result = await createSection(
         {
@@ -58,7 +60,7 @@ export default function CourseBuilderForm() {
       )
     }
     if (result) {
-      // console.log("section result", result)
+       console.log("section result", result)
       dispatch(setCourse(result))
       setEditSectionName(null)
       setValue("sectionName", "")
@@ -81,6 +83,7 @@ export default function CourseBuilderForm() {
   }
 
   const goToNext = () => {
+    console.log("Course content length:", course.courseContent.length); 
     if (course.courseContent.length === 0) {
       toast.error("Please add atleast one section")
       return

@@ -22,4 +22,4 @@ const subSectionSchema = new Schema(
 );
 
 // Check if the model already exists before defining it
-export const SubSection = mongoose.models.SubSection || mongoose.model("SubSection", subSectionSchema);
+export const SubSection = mongoose.model("SubSection", subSectionSchema);

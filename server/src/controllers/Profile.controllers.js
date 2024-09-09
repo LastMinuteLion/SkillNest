@@ -7,8 +7,32 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadImageToCloudinary } from "../utils/imageUploader.js";
 
 // Method for updating a profile
+// const updateProfile = asyncHandler(async (req, res) => {
+//     const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
+//     const id = req.user.id;
+
+//     if (!dateOfBirth || !contactNumber || !id) {
+//         throw new ApiError(400, "All fields are required");
+//     }
+
+//     const userDetails = await User.findById(id);
+//     const profileId = userDetails.additionalDetails;
+
+//     const profileDetails = await Profile.findById(profileId);
+
+//     profileDetails.dateOfBirth = dateOfBirth;
+//     profileDetails.about = about;
+//     profileDetails.gender = gender;
+//     profileDetails.contactNumber = contactNumber;
+//     await profileDetails.save();
+
+//     return res.status(200).json(
+//         new ApiResponse(200, profileDetails, "Profile updated successfully")
+//     );
+// });
+
 const updateProfile = asyncHandler(async (req, res) => {
-    const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
+    const { dateOfBirth = "", about = "", contactNumber, gender, image } = req.body;
     const id = req.user.id;
 
     if (!dateOfBirth || !contactNumber || !id) {
@@ -20,16 +44,24 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     const profileDetails = await Profile.findById(profileId);
 
+    // Update only the provided fields and preserve the existing image
     profileDetails.dateOfBirth = dateOfBirth;
     profileDetails.about = about;
     profileDetails.gender = gender;
     profileDetails.contactNumber = contactNumber;
+    
+    // Preserve the image field if it's not provided in the request
+    if (image) {
+        profileDetails.image = image;
+    }
+
     await profileDetails.save();
 
     return res.status(200).json(
         new ApiResponse(200, profileDetails, "Profile updated successfully")
     );
 });
+
 
 // Method for deleting an account
 const deleteAccount = asyncHandler(async (req, res) => {

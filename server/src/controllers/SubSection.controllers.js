@@ -1,4 +1,4 @@
-import { SubSection } from "../models/Subsection.models.js";
+import { SubSection } from "../models/SubSection.models.js";
 import { Section } from "../models/Section.models.js";
 import { Course } from "../models/Course.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
